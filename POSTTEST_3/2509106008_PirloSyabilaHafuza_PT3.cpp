@@ -85,33 +85,48 @@ void inputKeretaBaru(Kereta*& arr, int& count, int maxData) {
     bool duplikat;
     do {
         duplikat = false;
-        cout << "Nomor Kereta: ";
-        while (!(cin >> newData->noKereta)) {
-            cout << "Input harus angka. Ulangi: ";
-            cin.clear();
-            cin.ignore(1000, '\n');
+        string line;
+        while (true) {
+            cout << "Nomor Kereta: ";
+            getline(cin, line);
+            if (line.empty()) { cout << "Input tidak boleh kosong." << endl; continue; }
+            bool hanyaAngka = true;
+            for (char c : line) if (!isdigit(c)) { hanyaAngka = false; break; }
+            if (!hanyaAngka) { cout << "Input harus angka." << endl; continue; }
+            newData->noKereta = stoi(line);
+            break;
         }
+
         for(int i=0; i<count; i++) {
             if((arr+i)->noKereta == newData->noKereta) {
                 duplikat = true;
-                cout << "Nomor sudah terdaftar, gunakan nomor lain.\n";
+                cout << "Nomor sudah terdaftar, gunakan nomor lain." << endl;
                 break;
             }
         }
     } while(duplikat);
-    cin.ignore(1000, '\n');
 
+    // ✅ PERBAIKAN: Loop dengan prompt ulang (tidak silent wait)
     cout << "Nama Kereta: "; getline(cin, newData->namaKereta);
+    while(newData->namaKereta.empty()) { cout << "Input tidak boleh kosong. Nama Kereta: "; getline(cin, newData->namaKereta); }
+
     cout << "Asal: "; getline(cin, newData->asal);
+    while(newData->asal.empty()) { cout << "Input tidak boleh kosong. Asal: "; getline(cin, newData->asal); }
+
     cout << "Tujuan: "; getline(cin, newData->tujuan);
+    while(newData->tujuan.empty()) { cout << "Input tidak boleh kosong. Tujuan: "; getline(cin, newData->tujuan); }
 
     cout << "Harga Tiket: ";
-    while (!(cin >> newData->harga) || newData->harga < 0) {
-        cout << "Input tidak valid. Masukkan harga angka positif: ";
-        cin.clear();
-        cin.ignore(1000, '\n');
+    while (true) {
+        string line;
+        getline(cin, line);
+        if (line.empty()) { cout << "Input tidak boleh kosong. Masukkan harga angka positif: "; continue; }
+        bool hanyaAngka = true;
+        for (char c : line) if (!isdigit(c)) { hanyaAngka = false; break; }
+        if (!hanyaAngka || stoi(line) < 0) { cout << "Input tidak valid. Masukkan harga angka positif: "; continue; }
+        newData->harga = stoi(line);
+        break;
     }
-    cin.ignore(1000, '\n');
 
     count++;
 }
@@ -260,7 +275,7 @@ void urutkanBerdasarkanHarga(Kereta* arr, int count) { //Menggunakan Selection S
 // Fungsi Queue dan Stack
 void enqueue(Transaksi* q, int& front, int& rear, int max, Transaksi data) {
     if (rear == max - 1) {
-        cout << "Antrian penuh (Overflow)!" << endl;
+        cout << "Queue overflow" << endl;
         return;
     }
     if (front == -1) front = 0;
@@ -272,7 +287,7 @@ void enqueue(Transaksi* q, int& front, int& rear, int max, Transaksi data) {
 Transaksi dequeue(Transaksi* q, int& front, int& rear) {
     Transaksi kosong; kosong.namaPenumpang = "-";
     if (front == -1 || front > rear) {
-        cout << "Antrian kosong (Underflow)!" << endl;
+        cout << "Queue underflow" << endl;
         return kosong;
     }
     Transaksi data = *(q + front);
@@ -286,7 +301,7 @@ Transaksi dequeue(Transaksi* q, int& front, int& rear) {
 
 void pushStack(Transaksi* s, int& top, int max, Transaksi data) {
     if (top == max - 1) {
-        cout << "Riwayat penuh (Overflow)!" << endl;
+        cout << "Stack overflow" << endl;
         return;
     }
     top++;
@@ -296,7 +311,7 @@ void pushStack(Transaksi* s, int& top, int max, Transaksi data) {
 Transaksi popStack(Transaksi* s, int& top) {
     Transaksi kosong; kosong.namaPenumpang = "-";
     if (top == -1) {
-        cout << "Riwayat kosong (Underflow)!" << endl;
+        cout << "Stack underflow" << endl;
         return kosong;
     }
     return *(s + top--);
@@ -375,13 +390,19 @@ int main() {
         cout << "11. Cek Depan & Terakhir" << endl;
         cout << "12. Hapus Transaksi Terakhir" << endl;
         cout << "0. Keluar" << endl;
-        cout << "Pilih Menu: ";
-        while (!(cin >> pilihan)) {
+        
+        string line;
+        while (true) {
+            cout << "Pilih Menu: ";
+            getline(cin, line);
+            if (line.empty()) { cout << "Pilihan tidak valid. Masukkan angka: "; continue; }
+            bool hanyaAngka = true;
+            for (char c : line) if (!isdigit(c)) { hanyaAngka = false; break; }
+            if (!hanyaAngka) { cout << "Pilihan tidak valid. Masukkan angka: "; continue; }
+            pilihan = stoi(line);
+            if (pilihan >= 0 && pilihan <= 12) break;
             cout << "Pilihan tidak valid. Masukkan angka: ";
-            cin.clear();
-            cin.ignore(1000, '\n');
         }
-        cin.ignore(1000, '\n');
 
         switch (pilihan) {
             case 1:
@@ -395,22 +416,28 @@ int main() {
             case 3: {
                 string asal, tujuan;
                 cout << "Masukkan Asal: "; getline(cin, asal);
+                while(asal.empty()) { cout << "Asal tidak boleh kosong. Masukkan Asal: "; getline(cin, asal); }
                 cout << "Masukkan Tujuan: "; getline(cin, tujuan);
+                while(tujuan.empty()) { cout << "Tujuan tidak boleh kosong. Masukkan Tujuan: "; getline(cin, tujuan); }
+                
                 cariBerdasarkanRute(dataKereta, jumlahData, asal, tujuan);
                 cout << "\nTekan Enter untuk kembali..."; cin.get();
                 break;
             }
             case 4: {
                 int id;
-                cout << "Masukkan Nomor Kereta: "; 
-                if (cin >> id) {
-                    cin.ignore(1000, '\n');
-                    urutkanBerdasarkanID(dataKereta, jumlahData);
-                    cariBerdasarkanNomor(dataKereta, jumlahData, id);
-                } else {
-                    cin.clear(); cin.ignore(1000, '\n');
-                    cout << "Input tidak valid." << endl;
+                while (true) {
+                    cout << "Masukkan Nomor Kereta: ";
+                    getline(cin, line);
+                    if (line.empty()) { cout << "Input tidak boleh kosong." << endl; continue; }
+                    bool hanyaAngka = true;
+                    for (char c : line) if (!isdigit(c)) { hanyaAngka = false; break; }
+                    if (!hanyaAngka) { cout << "Input harus angka." << endl; continue; }
+                    id = stoi(line);
+                    break;
                 }
+                urutkanBerdasarkanID(dataKereta, jumlahData);
+                cariBerdasarkanNomor(dataKereta, jumlahData, id);
                 cout << "\nTekan Enter untuk kembali..."; cin.get();
                 break;
             }
@@ -427,10 +454,27 @@ int main() {
                 break;
             case 7: {
                 Transaksi tiketBaru;
-                cout << "\n--- Tambah ke Antrian (Enqueue) ---" << endl;
-                cout << "Nama Penumpang: "; getline(cin, tiketBaru.namaPenumpang);
+                cout << "\n--- Tambah ke Antrian ---" << endl;
+                cout << "Nama Penumpang: "; 
+                getline(cin, tiketBaru.namaPenumpang);
+                if (tiketBaru.namaPenumpang.empty()) {
+                    cout << "Nama penumpang tidak boleh kosong!" << endl;
+                    cout << "\nTekan Enter untuk kembali..."; cin.get();
+                    break;
+                }
+                
                 int idKereta;
-                cout << "Nomor Kereta: "; cin >> idKereta; cin.ignore();
+                while (true) {
+                    cout << "Nomor Kereta: ";
+                    getline(cin, line);
+                    if (line.empty()) { cout << "Input tidak boleh kosong." << endl; continue; }
+                    bool hanyaAngka = true;
+                    for (char c : line) if (!isdigit(c)) { hanyaAngka = false; break; }
+                    if (!hanyaAngka) { cout << "Input harus angka." << endl; continue; }
+                    idKereta = stoi(line);
+                    break;
+                }
+
                 bool found = false;
                 for(int i=0; i<jumlahData; i++) {
                     if(dataKereta[i].noKereta == idKereta) {
@@ -448,15 +492,12 @@ int main() {
                 break;
             }
             case 8: {
-                cout << "\n--- Proses Antrian (Dequeue) ---" << endl;
-                if(frontQ == -1) { cout << "Antrian kosong (Underflow)!" << endl; }
-                else {
-                    Transaksi data = dequeue(antrian, frontQ, rearQ);
-                    if(data.namaPenumpang != "-") {
-                        cout << "Memproses: " << data.namaPenumpang << " | Rute: " << data.asal << " - " << data.tujuan << endl;
-                        pushStack(riwayat, topS, MAX_DATA, data);
-                        cout << "Tiket berhasil diproses & dicatat ke riwayat." << endl;
-                    }
+                cout << "\n--- Proses Antrian ---" << endl;
+                Transaksi data = dequeue(antrian, frontQ, rearQ);
+                if(data.namaPenumpang != "-") {
+                    cout << "Memproses: " << data.namaPenumpang << " | Rute: " << data.asal << " - " << data.tujuan << endl;
+                    pushStack(riwayat, topS, MAX_DATA, data);
+                    cout << "Tiket berhasil diproses & dicatat ke riwayat." << endl;
                 }
                 cout << "\nTekan Enter untuk kembali..."; cin.get();
                 break;
@@ -475,15 +516,15 @@ int main() {
                 peekStack(riwayat, topS);
                 cout << "\nTekan Enter untuk kembali..."; cin.get();
                 break;
-            case 12:
-                cout << "\n--- Hapus Transaksi Terakhir (Pop) ---" << endl;
-                if(topS == -1) { cout << "Riwayat kosong (Underflow)!" << endl; }
-                else {
-                    Transaksi data = popStack(riwayat, topS);
+            case 12: {
+                cout << "\n--- Hapus Transaksi Terakhir ---" << endl;
+                Transaksi data = popStack(riwayat, topS);
+                if(data.namaPenumpang != "-") {
                     cout << "Transaksi " << data.namaPenumpang << " (" << data.namaKereta << ") dibatalkan." << endl;
                 }
                 cout << "\nTekan Enter untuk kembali..."; cin.get();
                 break;
+            }
             case 0:
                 cout << "Terima kasih telah menggunakan sistem ini." << endl;
                 break;
