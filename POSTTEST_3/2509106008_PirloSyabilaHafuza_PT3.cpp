@@ -27,7 +27,7 @@ struct Transaksi {
     int harga;
 };
 
-// ========== FUNGSI BANTUAN ==========
+// Fungsi Bantuan
 string toLower(string str) {
     for (char &c : str) c = tolower(c);
     return str;
@@ -43,7 +43,7 @@ string formatHarga(int angka) {
     return res;
 }
 
-// ========== FUNGSI UTAMA (KERETA) ==========
+// Fungsi SOrting dan Searching
 void tukarData(Kereta* a, Kereta* b) {
     Kereta temp = *a;
     *a = *b;
@@ -116,7 +116,7 @@ void inputKeretaBaru(Kereta*& arr, int& count, int maxData) {
     count++;
 }
 
-void cariBerdasarkanRute(Kereta* arr, int count, string cariAsal, string cariTujuan) { // Algoritma: Linear Search
+void cariBerdasarkanRute(Kereta* arr, int count, string cariAsal, string cariTujuan) { //Menggunakan Linear Search
     if (count == 0) {
         cout << "\n--- Pencarian Rute: " << cariAsal << " - " << cariTujuan << " ---" << endl;
         cout << "Belum ada data kereta untuk dicari." << endl;
@@ -145,7 +145,7 @@ void cariBerdasarkanRute(Kereta* arr, int count, string cariAsal, string cariTuj
     }
 }
 
-void urutkanBerdasarkanID(Kereta* arr, int count) { // Algoritma: Selection Sort
+void urutkanBerdasarkanID(Kereta* arr, int count) { //Menggunakan Selection Sort
     for (int i = 0; i < count - 1; i++) {
         int minIdx = i;
         for (int j = i + 1; j < count; j++) {
@@ -159,7 +159,7 @@ void urutkanBerdasarkanID(Kereta* arr, int count) { // Algoritma: Selection Sort
     }
 }
 
-void cariBerdasarkanNomor(Kereta* arr, int count, int targetID) { // Algoritma: Jump Search
+void cariBerdasarkanNomor(Kereta* arr, int count, int targetID) { // Menggunakan Jump Search
     if (count == 0) {
         cout << "\n--- Pencarian Nomor Kereta: " << targetID << " ---" << endl;
         cout << "Belum ada data kereta untuk dicari." << endl;
@@ -195,7 +195,7 @@ void cariBerdasarkanNomor(Kereta* arr, int count, int targetID) { // Algoritma: 
     cout << "Nomor kereta tidak ditemukan." << endl;
 }
 
-void gabungData(Kereta* arr, int l, int m, int r) { // Algoritma: Merge Sort (Fungsi Penggabungan)
+void gabungData(Kereta* arr, int l, int m, int r) { // Menggunakan Merge Sort
     int n1 = m - l + 1;
     int n2 = r - m;
 
@@ -232,7 +232,7 @@ void gabungData(Kereta* arr, int l, int m, int r) { // Algoritma: Merge Sort (Fu
     delete[] R;
 }
 
-void urutkanBerdasarkanNama(Kereta* arr, int l, int r) { // Algoritma: Merge Sort
+void urutkanBerdasarkanNama(Kereta* arr, int l, int r) { //Menggunakan Merge Sort
     if (l < r) {
         int m = l + (r - l) / 2;
         urutkanBerdasarkanNama(arr, l, m);
@@ -241,7 +241,7 @@ void urutkanBerdasarkanNama(Kereta* arr, int l, int r) { // Algoritma: Merge Sor
     }
 }
 
-void urutkanBerdasarkanHarga(Kereta* arr, int count) { // Algoritma: Selection Sort
+void urutkanBerdasarkanHarga(Kereta* arr, int count) { //Menggunakan Selection Sort
     cout << "\n--- Mengurutkan Data (Harga Termurah) ---" << endl;
     for (int i = 0; i < count - 1; i++) {
         int minIdx = i;
@@ -257,7 +257,7 @@ void urutkanBerdasarkanHarga(Kereta* arr, int count) { // Algoritma: Selection S
     cout << "Pengurutan selesai." << endl;
 }
 
-// ========== FUNGSI QUEUE & STACK ==========
+// Fungsi Queue dan Stack
 void enqueue(Transaksi* q, int& front, int& rear, int max, Transaksi data) {
     if (rear == max - 1) {
         cout << "Antrian penuh (Overflow)!" << endl;
@@ -276,7 +276,6 @@ Transaksi dequeue(Transaksi* q, int& front, int& rear) {
         return kosong;
     }
     Transaksi data = *(q + front);
-    // Pergeseran elemen menggunakan dereferensi pointer
     for (int i = front; i < rear; i++) {
         *(q + i) = *(q + i + 1);
     }
@@ -306,13 +305,13 @@ Transaksi popStack(Transaksi* s, int& top) {
 void peekQueue(Transaksi* q, int front) {
     if (front == -1) { cout << "Antrian kosong." << endl; return; }
     cout << "Depan Antrian: " << (q + front)->namaPenumpang 
-         << " | Kereta: " << (q + front)->namaKereta << endl;
+        << " | Kereta: " << (q + front)->namaKereta << endl;
 }
 
 void peekStack(Transaksi* s, int top) {
     if (top == -1) { cout << "Riwayat kosong." << endl; return; }
     cout << "Transaksi Terakhir: " << (s + top)->namaPenumpang 
-         << " | Kereta: " << (s + top)->namaKereta << endl;
+        << " | Kereta: " << (s + top)->namaKereta << endl;
 }
 
 void tampilAntrian(Transaksi* q, int front, int rear) {
@@ -322,9 +321,9 @@ void tampilAntrian(Transaksi* q, int front, int rear) {
     cout << "-----------------------------------------------" << endl;
     for (int i = front; i <= rear; i++) {
         cout << left << setw(5) << i - front + 1
-             << setw(20) << (q + i)->namaPenumpang
-             << setw(15) << (q + i)->namaKereta
-             << setw(15) << (q + i)->asal + "-" + (q + i)->tujuan << endl;
+            << setw(20) << (q + i)->namaPenumpang
+            << setw(15) << (q + i)->namaKereta
+            << setw(15) << (q + i)->asal + "-" + (q + i)->tujuan << endl;
     }
 }
 
@@ -335,13 +334,13 @@ void tampilRiwayat(Transaksi* s, int top) {
     cout << "-----------------------------------------------" << endl;
     for (int i = 0; i <= top; i++) {
         cout << left << setw(5) << i + 1
-             << setw(20) << (s + i)->namaPenumpang
-             << setw(15) << (s + i)->namaKereta
-             << setw(12) << formatHarga((s + i)->harga) << endl;
+        << setw(20) << (s + i)->namaPenumpang
+        << setw(15) << (s + i)->namaKereta
+        << setw(12) << formatHarga((s + i)->harga) << endl;
     }
 }
 
-// ========== MAIN ==========
+// Fungsi Main
 int main() {
     const int MAX_DATA = 100;
     Kereta* dataKereta = new Kereta[MAX_DATA]; 
@@ -369,12 +368,12 @@ int main() {
         cout << "4. Cari Berdasarkan Nomor" << endl;
         cout << "5. Urutkan Nama Kereta" << endl;
         cout << "6. Urutkan Harga Tiket" << endl;
-        cout << "7. Tambah ke Antrian (Enqueue)" << endl;
-        cout << "8. Proses Antrian (Dequeue)" << endl;
+        cout << "7. Tambah ke Antrian" << endl;
+        cout << "8. Proses Antrian" << endl;
         cout << "9. Tampil Semua Antrian" << endl;
         cout << "10. Tampil Semua Riwayat" << endl;
-        cout << "11. Cek Depan & Terakhir (Peek)" << endl;
-        cout << "12. Hapus Transaksi Terakhir (Pop)" << endl;
+        cout << "11. Cek Depan & Terakhir" << endl;
+        cout << "12. Hapus Transaksi Terakhir" << endl;
         cout << "0. Keluar" << endl;
         cout << "Pilih Menu: ";
         while (!(cin >> pilihan)) {
