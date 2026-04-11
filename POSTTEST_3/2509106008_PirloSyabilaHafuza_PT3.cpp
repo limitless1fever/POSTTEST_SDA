@@ -106,7 +106,6 @@ void inputKeretaBaru(Kereta*& arr, int& count, int maxData) {
         }
     } while(duplikat);
 
-    // ✅ PERBAIKAN: Loop dengan prompt ulang (tidak silent wait)
     cout << "Nama Kereta: "; getline(cin, newData->namaKereta);
     while(newData->namaKereta.empty()) { cout << "Input tidak boleh kosong. Nama Kereta: "; getline(cin, newData->namaKereta); }
 
@@ -511,7 +510,7 @@ int main() {
                 cout << "\nTekan Enter untuk kembali..."; cin.get();
                 break;
             case 11:
-                cout << "\n--- Cek Depan & Terakhir (Peek) ---" << endl;
+                cout << "\n--- Cek Depan & Terakhir ---" << endl;
                 peekQueue(antrian, frontQ);
                 peekStack(riwayat, topS);
                 cout << "\nTekan Enter untuk kembali..."; cin.get();
